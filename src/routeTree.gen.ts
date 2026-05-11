@@ -9,38 +9,189 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TentangRouteImport } from './routes/tentang'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LaporRouteImport } from './routes/lapor'
+import { Route as KontakRouteImport } from './routes/kontak'
+import { Route as KonsultasiRouteImport } from './routes/konsultasi'
+import { Route as EdukasiRouteImport } from './routes/edukasi'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
+const TentangRoute = TentangRouteImport.update({
+  id: '/tentang',
+  path: '/tentang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaporRoute = LaporRouteImport.update({
+  id: '/lapor',
+  path: '/lapor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontakRoute = KontakRouteImport.update({
+  id: '/kontak',
+  path: '/kontak',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonsultasiRoute = KonsultasiRouteImport.update({
+  id: '/konsultasi',
+  path: '/konsultasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EdukasiRoute = EdukasiRouteImport.update({
+  id: '/edukasi',
+  path: '/edukasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/edukasi': typeof EdukasiRoute
+  '/konsultasi': typeof KonsultasiRoute
+  '/kontak': typeof KontakRoute
+  '/lapor': typeof LaporRoute
+  '/login': typeof LoginRoute
+  '/tentang': typeof TentangRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/edukasi': typeof EdukasiRoute
+  '/konsultasi': typeof KonsultasiRoute
+  '/kontak': typeof KontakRoute
+  '/lapor': typeof LaporRoute
+  '/login': typeof LoginRoute
+  '/tentang': typeof TentangRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/edukasi': typeof EdukasiRoute
+  '/konsultasi': typeof KonsultasiRoute
+  '/kontak': typeof KontakRoute
+  '/lapor': typeof LaporRoute
+  '/login': typeof LoginRoute
+  '/tentang': typeof TentangRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/edukasi'
+    | '/konsultasi'
+    | '/kontak'
+    | '/lapor'
+    | '/login'
+    | '/tentang'
+    | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/edukasi'
+    | '/konsultasi'
+    | '/kontak'
+    | '/lapor'
+    | '/login'
+    | '/tentang'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/edukasi'
+    | '/konsultasi'
+    | '/kontak'
+    | '/lapor'
+    | '/login'
+    | '/tentang'
+    | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  EdukasiRoute: typeof EdukasiRoute
+  KonsultasiRoute: typeof KonsultasiRoute
+  KontakRoute: typeof KontakRoute
+  LaporRoute: typeof LaporRoute
+  LoginRoute: typeof LoginRoute
+  TentangRoute: typeof TentangRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tentang': {
+      id: '/tentang'
+      path: '/tentang'
+      fullPath: '/tentang'
+      preLoaderRoute: typeof TentangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lapor': {
+      id: '/lapor'
+      path: '/lapor'
+      fullPath: '/lapor'
+      preLoaderRoute: typeof LaporRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontak': {
+      id: '/kontak'
+      path: '/kontak'
+      fullPath: '/kontak'
+      preLoaderRoute: typeof KontakRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konsultasi': {
+      id: '/konsultasi'
+      path: '/konsultasi'
+      fullPath: '/konsultasi'
+      preLoaderRoute: typeof KonsultasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edukasi': {
+      id: '/edukasi'
+      path: '/edukasi'
+      fullPath: '/edukasi'
+      preLoaderRoute: typeof EdukasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +199,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  EdukasiRoute: EdukasiRoute,
+  KonsultasiRoute: KonsultasiRoute,
+  KontakRoute: KontakRoute,
+  LaporRoute: LaporRoute,
+  LoginRoute: LoginRoute,
+  TentangRoute: TentangRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
