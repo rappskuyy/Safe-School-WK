@@ -64,7 +64,6 @@ function Dashboard() {
   useEffect(() => { loadAll(); }, []);
 
   const moodCount = moods.reduce<Record<string, number>>((acc, x) => {
-    acc[x.mood] = (acc[x.mono] || 0) + 1; // typo guard fallback
     acc[x.mood] = (acc[x.mood] || 0) + 1;
     return acc;
   }, {});
