@@ -1,8 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { Shield, Menu, X, LogOut, LayoutDashboard } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/lib/auth-context";
+import { getTeacher, logoutTeacher } from "@/lib/teacher-auth";
+import { toast } from "sonner";
 
 const links = [
   { to: "/", label: "Home" },
@@ -15,8 +16,20 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { user, isApprovedStaff, signOut } = useAuth();
+  const [teacher, setTeacher] = useState<ReturnType<typeof getTeacher>>(null);
+  const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    setTeacher(getTeacher());
+  }, [path]);
+
+  const doLogout = () => {
+    logoutTeacher();
+    setTeacher(null);
+    toast.success("Berhasil keluar");
+    navigate({ to: "/" });
+  };
 
   return (
     <header className="sticky top-0 z-50 glass border-b">
@@ -44,17 +57,17 @@ export function SiteHeader() {
         </ul>
 
         <div className="hidden items-center gap-2 lg:flex">
-          {user && isApprovedStaff && (
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/dashboard"><LayoutDashboard className="mr-1 h-4 w-4" />Dashboard</Link>
-            </Button>
-          )}
-          {user ? (
-            <Button onClick={signOut} variant="outline" size="sm">
-              <LogOut className="mr-1 h-4 w-4" />Keluar
-            </Button>
+          {teacher ? (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/dashboard"><LayoutDashboard className="mr-1 h-4 w-4" />Dashboard</Link>
+              </Button>
+              <Button onClick={doLogout} variant="outline" size="sm">
+                <LogOut className="mr-1 h-4 w-4" />Keluar
+              </Button>
+            </>
           ) : (
-            <Button asChild size="sm" className="gradient-brand text-white">
+            <Button asChild size="sm" className="gradient-brand text-white shadow-glow">
               <Link to="/login">Login Guru</Link>
             </Button>
           )}
@@ -85,14 +98,16 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
-            <li className="pt-2">
-              {user && isApprovedStaff && (
-                <Link to="/dashboard" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2 text-sm font-medium">
-                  Dashboard
-                </Link>
-              )}
-              {user ? (
-                <Button onClick={signOut} variant="outline" size="sm" className="w-full">Keluar</Button>
+            <li className="pt-2 space-y-2">
+              {teacher ? (
+                <>
+                  <Button asChild variant="outline" size="sm" className="w-full">
+                    <Link to="/dashboard" onClick={() => setOpen(false)}>Dashboard</Link>
+                  </Button>
+                  <Button onClick={() => { doLogout(); setOpen(false); }} variant="outline" size="sm" className="w-full">
+                    Keluar
+                  </Button>
+                </>
               ) : (
                 <Button asChild size="sm" className="w-full gradient-brand text-white">
                   <Link to="/login" onClick={() => setOpen(false)}>Login Guru</Link>

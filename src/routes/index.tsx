@@ -116,6 +116,11 @@ function HomePage() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 gradient-hero opacity-10" />
+        {/* blob warna-warni */}
+        <div className="pointer-events-none absolute -top-24 -left-24 -z-10 h-80 w-80 rounded-full bg-blue-400/30 blur-3xl animate-float" />
+        <div className="pointer-events-none absolute top-40 right-0 -z-10 h-96 w-96 rounded-full bg-purple-400/30 blur-3xl animate-float [animation-delay:1.5s]" />
+        <div className="pointer-events-none absolute bottom-0 left-1/3 -z-10 h-72 w-72 rounded-full bg-pink-400/20 blur-3xl animate-float [animation-delay:3s]" />
+
         <div className="container mx-auto grid items-center gap-12 px-4 py-20 lg:grid-cols-2 lg:py-28">
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-primary shadow-soft">
@@ -138,8 +143,8 @@ function HomePage() {
               </Button>
             </div>
             <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-green-500" />100% Anonim</div>
-              <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-primary" />Didampingi Guru BK</div>
+              <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />100% Anonim</div>
+              <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-primary animate-pulse" />Didampingi Guru BK</div>
             </div>
           </div>
           <div className="relative animate-float">
@@ -150,6 +155,25 @@ function HomePage() {
               width={1024} height={1024}
               className="mx-auto w-full max-w-md rounded-3xl shadow-glow"
             />
+            {/* badge melayang */}
+            <div className="absolute -left-4 top-10 hidden rounded-2xl bg-white/90 p-3 shadow-glow backdrop-blur dark:bg-slate-900/90 md:block animate-fade-up">
+              <div className="flex items-center gap-2 text-xs">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-600">✓</span>
+                <div>
+                  <div className="font-semibold">Laporan terkirim</div>
+                  <div className="text-muted-foreground">Guru BK menerima</div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute -right-4 bottom-10 hidden rounded-2xl bg-white/90 p-3 shadow-glow backdrop-blur dark:bg-slate-900/90 md:block animate-fade-up [animation-delay:0.3s]">
+              <div className="flex items-center gap-2 text-xs">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-purple-100 text-purple-600">💜</span>
+                <div>
+                  <div className="font-semibold">Kamu didengar</div>
+                  <div className="text-muted-foreground">Aman & rahasia</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -162,13 +186,13 @@ function HomePage() {
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: ShieldCheck, t: "Tempat Aman", d: "Ruang aman untuk berbagi tanpa takut dihakimi." },
-            { icon: FileWarning, t: "Lapor Bullying", d: "Sampaikan laporan secara anonim dan rahasia." },
-            { icon: MessageCircleHeart, t: "Konsultasi BK", d: "Atur jadwal langsung dengan Guru BK." },
-            { icon: BookOpen, t: "Edukasi Mental", d: "Artikel & video tentang kesehatan mental remaja." },
+            { icon: ShieldCheck,        t: "Tempat Aman",    d: "Ruang aman untuk berbagi tanpa takut dihakimi.", c: "from-emerald-500 to-teal-600" },
+            { icon: FileWarning,        t: "Lapor Bullying", d: "Sampaikan laporan secara anonim dan rahasia.",   c: "from-rose-500 to-pink-600" },
+            { icon: MessageCircleHeart, t: "Konsultasi BK",  d: "Atur jadwal langsung dengan Guru BK.",            c: "from-blue-500 to-indigo-600" },
+            { icon: BookOpen,           t: "Edukasi Mental", d: "Artikel & video tentang kesehatan mental remaja.",c: "from-violet-500 to-purple-600" },
           ].map((f, i) => (
             <Card key={i} className="group p-6 transition hover:-translate-y-2 hover:shadow-glow">
-              <div className="grid h-12 w-12 place-items-center rounded-xl gradient-brand text-white">
+              <div className={`grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br ${f.c} text-white shadow-glow`}>
                 <f.icon className="h-6 w-6" />
               </div>
               <h3 className="mt-4 font-display text-lg font-semibold">{f.t}</h3>
