@@ -67,7 +67,7 @@ export function SiteHeader() {
               </Button>
             </>
           ) : (
-            <Button asChild size="sm" className="gradient-brand text-white shadow-sog">
+            <Button asChild size="sm" className="gradient-brand text-white shadow-glow">
               <Link to="/login">Login Guru</Link>
             </Button>
           )}
