@@ -16,8 +16,10 @@ import { Route as LaporRouteImport } from './routes/lapor'
 import { Route as KontakRouteImport } from './routes/kontak'
 import { Route as KonsultasiRouteImport } from './routes/konsultasi'
 import { Route as EdukasiRouteImport } from './routes/edukasi'
+import { Route as UserRouteImport } from './routes/_user'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserSiswaRouteImport } from './routes/_user/siswa'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const TentangRoute = TentangRouteImport.update({
@@ -55,6 +57,10 @@ const EdukasiRoute = EdukasiRouteImport.update({
   path: '/edukasi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserRoute = UserRouteImport.update({
+  id: '/_user',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -63,6 +69,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UserSiswaRoute = UserSiswaRouteImport.update({
+  id: '/siswa',
+  path: '/siswa',
+  getParentRoute: () => UserRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -80,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/siswa': typeof UserSiswaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,11 +103,13 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/siswa': typeof UserSiswaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_user': typeof UserRouteWithChildren
   '/edukasi': typeof EdukasiRoute
   '/konsultasi': typeof KonsultasiRoute
   '/kontak': typeof KontakRoute
@@ -104,6 +118,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_user/siswa': typeof UserSiswaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,6 +132,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/tentang'
     | '/dashboard'
+    | '/siswa'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,10 +144,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/tentang'
     | '/dashboard'
+    | '/siswa'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_user'
     | '/edukasi'
     | '/konsultasi'
     | '/kontak'
@@ -140,11 +158,13 @@ export interface FileRouteTypes {
     | '/register'
     | '/tentang'
     | '/_authenticated/dashboard'
+    | '/_user/siswa'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  UserRoute: typeof UserRouteWithChildren
   EdukasiRoute: typeof EdukasiRoute
   KonsultasiRoute: typeof KonsultasiRoute
   KontakRoute: typeof KontakRoute
@@ -205,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EdukasiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_user': {
+      id: '/_user'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof UserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -218,6 +245,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_user/siswa': {
+      id: '/_user/siswa'
+      path: '/siswa'
+      fullPath: '/siswa'
+      preLoaderRoute: typeof UserSiswaRouteImport
+      parentRoute: typeof UserRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -241,9 +275,20 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface UserRouteChildren {
+  UserSiswaRoute: typeof UserSiswaRoute
+}
+
+const UserRouteChildren: UserRouteChildren = {
+  UserSiswaRoute: UserSiswaRoute,
+}
+
+const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  UserRoute: UserRouteWithChildren,
   EdukasiRoute: EdukasiRoute,
   KonsultasiRoute: KonsultasiRoute,
   KontakRoute: KontakRoute,
@@ -255,3 +300,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
