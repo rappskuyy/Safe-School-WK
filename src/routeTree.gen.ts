@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TentangRouteImport } from './routes/tentang'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LaporRouteImport } from './routes/lapor'
 import { Route as KontakRouteImport } from './routes/kontak'
@@ -22,6 +23,11 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 const TentangRoute = TentangRouteImport.update({
   id: '/tentang',
   path: '/tentang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/kontak': typeof KontakRoute
   '/lapor': typeof LaporRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/kontak': typeof KontakRoute
   '/lapor': typeof LaporRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/kontak': typeof KontakRoute
   '/lapor': typeof LaporRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/kontak'
     | '/lapor'
     | '/login'
+    | '/register'
     | '/tentang'
     | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/kontak'
     | '/lapor'
     | '/login'
+    | '/register'
     | '/tentang'
     | '/dashboard'
   id:
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/kontak'
     | '/lapor'
     | '/login'
+    | '/register'
     | '/tentang'
     | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
@@ -138,6 +150,7 @@ export interface RootRouteChildren {
   KontakRoute: typeof KontakRoute
   LaporRoute: typeof LaporRoute
   LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
   TentangRoute: typeof TentangRoute
 }
 
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/tentang'
       fullPath: '/tentang'
       preLoaderRoute: typeof TentangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -229,8 +249,19 @@ const rootRouteChildren: RootRouteChildren = {
   KontakRoute: KontakRoute,
   LaporRoute: LaporRoute,
   LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
   TentangRoute: TentangRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
