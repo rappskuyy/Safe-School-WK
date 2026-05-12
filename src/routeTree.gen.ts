@@ -21,6 +21,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserSiswaRouteImport } from './routes/_user/siswa'
 import { Route as UserOrtuRouteImport } from './routes/_user/ortu'
+import { Route as UserLeaderboardRouteImport } from './routes/_user/leaderboard'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const TentangRoute = TentangRouteImport.update({
@@ -81,6 +82,11 @@ const UserOrtuRoute = UserOrtuRouteImport.update({
   path: '/ortu',
   getParentRoute: () => UserRoute,
 } as any)
+const UserLeaderboardRoute = UserLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => UserRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/leaderboard': typeof UserLeaderboardRoute
   '/ortu': typeof UserOrtuRoute
   '/siswa': typeof UserSiswaRoute
 }
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/leaderboard': typeof UserLeaderboardRoute
   '/ortu': typeof UserOrtuRoute
   '/siswa': typeof UserSiswaRoute
 }
@@ -126,6 +134,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_user/leaderboard': typeof UserLeaderboardRoute
   '/_user/ortu': typeof UserOrtuRoute
   '/_user/siswa': typeof UserSiswaRoute
 }
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/tentang'
     | '/dashboard'
+    | '/leaderboard'
     | '/ortu'
     | '/siswa'
   fileRoutesByTo: FileRoutesByTo
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/tentang'
     | '/dashboard'
+    | '/leaderboard'
     | '/ortu'
     | '/siswa'
   id:
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/tentang'
     | '/_authenticated/dashboard'
+    | '/_user/leaderboard'
     | '/_user/ortu'
     | '/_user/siswa'
   fileRoutesById: FileRoutesById
@@ -272,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserOrtuRouteImport
       parentRoute: typeof UserRoute
     }
+    '/_user/leaderboard': {
+      id: '/_user/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof UserLeaderboardRouteImport
+      parentRoute: typeof UserRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -295,11 +314,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface UserRouteChildren {
+  UserLeaderboardRoute: typeof UserLeaderboardRoute
   UserOrtuRoute: typeof UserOrtuRoute
   UserSiswaRoute: typeof UserSiswaRoute
 }
 
 const UserRouteChildren: UserRouteChildren = {
+  UserLeaderboardRoute: UserLeaderboardRoute,
   UserOrtuRoute: UserOrtuRoute,
   UserSiswaRoute: UserSiswaRoute,
 }
