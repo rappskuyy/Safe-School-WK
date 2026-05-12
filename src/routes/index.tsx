@@ -124,15 +124,16 @@ function HomePage() {
         <div className="container mx-auto grid items-center gap-12 px-4 py-20 lg:grid-cols-2 lg:py-28">
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-primary shadow-soft">
-              <ShieldCheck className="h-3.5 w-3.5" /> Platform resmi sekolah
+              <ShieldCheck className="h-3.5 w-3.5" /> Platform resmi SMK Wikrama Bogor
             </span>
             <h1 className="mt-5 font-display text-5xl font-extrabold leading-tight md:text-6xl">
               Stop Bullying,<br />
               <span className="text-gradient-brand">Mulai Lingkungan Aman</span>
             </h1>
             <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-              SafeSchool adalah ruang aman untuk siswa SMA melaporkan bullying dan berkonsultasi
-              dengan Guru BK secara mudah, rahasia, dan didampingi tenaga profesional.
+              SafeSchool adalah ruang aman bagi keluarga besar <strong>SMK Wikrama Bogor</strong> —
+              siswa, orang tua, dan guru BK — untuk melaporkan bullying, berkonsultasi, memantau
+              progres akademik, dan saling mendukung.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="gradient-brand text-white shadow-glow">

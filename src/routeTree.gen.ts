@@ -10,18 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TentangRouteImport } from './routes/tentang'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LaporRouteImport } from './routes/lapor'
 import { Route as KontakRouteImport } from './routes/kontak'
 import { Route as KonsultasiRouteImport } from './routes/konsultasi'
 import { Route as EdukasiRouteImport } from './routes/edukasi'
+import { Route as UserRouteImport } from './routes/_user'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserSiswaRouteImport } from './routes/_user/siswa'
+import { Route as UserOrtuRouteImport } from './routes/_user/ortu'
+import { Route as UserLeaderboardRouteImport } from './routes/_user/leaderboard'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const TentangRoute = TentangRouteImport.update({
   id: '/tentang',
   path: '/tentang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -49,6 +59,10 @@ const EdukasiRoute = EdukasiRouteImport.update({
   path: '/edukasi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserRoute = UserRouteImport.update({
+  id: '/_user',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -57,6 +71,21 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UserSiswaRoute = UserSiswaRouteImport.update({
+  id: '/siswa',
+  path: '/siswa',
+  getParentRoute: () => UserRoute,
+} as any)
+const UserOrtuRoute = UserOrtuRouteImport.update({
+  id: '/ortu',
+  path: '/ortu',
+  getParentRoute: () => UserRoute,
+} as any)
+const UserLeaderboardRoute = UserLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => UserRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -71,8 +100,12 @@ export interface FileRoutesByFullPath {
   '/kontak': typeof KontakRoute
   '/lapor': typeof LaporRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/leaderboard': typeof UserLeaderboardRoute
+  '/ortu': typeof UserOrtuRoute
+  '/siswa': typeof UserSiswaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -81,20 +114,29 @@ export interface FileRoutesByTo {
   '/kontak': typeof KontakRoute
   '/lapor': typeof LaporRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/leaderboard': typeof UserLeaderboardRoute
+  '/ortu': typeof UserOrtuRoute
+  '/siswa': typeof UserSiswaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_user': typeof UserRouteWithChildren
   '/edukasi': typeof EdukasiRoute
   '/konsultasi': typeof KonsultasiRoute
   '/kontak': typeof KontakRoute
   '/lapor': typeof LaporRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/tentang': typeof TentangRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_user/leaderboard': typeof UserLeaderboardRoute
+  '/_user/ortu': typeof UserOrtuRoute
+  '/_user/siswa': typeof UserSiswaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,8 +147,12 @@ export interface FileRouteTypes {
     | '/kontak'
     | '/lapor'
     | '/login'
+    | '/register'
     | '/tentang'
     | '/dashboard'
+    | '/leaderboard'
+    | '/ortu'
+    | '/siswa'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -115,29 +161,40 @@ export interface FileRouteTypes {
     | '/kontak'
     | '/lapor'
     | '/login'
+    | '/register'
     | '/tentang'
     | '/dashboard'
+    | '/leaderboard'
+    | '/ortu'
+    | '/siswa'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_user'
     | '/edukasi'
     | '/konsultasi'
     | '/kontak'
     | '/lapor'
     | '/login'
+    | '/register'
     | '/tentang'
     | '/_authenticated/dashboard'
+    | '/_user/leaderboard'
+    | '/_user/ortu'
+    | '/_user/siswa'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  UserRoute: typeof UserRouteWithChildren
   EdukasiRoute: typeof EdukasiRoute
   KonsultasiRoute: typeof KonsultasiRoute
   KontakRoute: typeof KontakRoute
   LaporRoute: typeof LaporRoute
   LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
   TentangRoute: typeof TentangRoute
 }
 
@@ -148,6 +205,13 @@ declare module '@tanstack/react-router' {
       path: '/tentang'
       fullPath: '/tentang'
       preLoaderRoute: typeof TentangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -185,6 +249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EdukasiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_user': {
+      id: '/_user'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof UserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -198,6 +269,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_user/siswa': {
+      id: '/_user/siswa'
+      path: '/siswa'
+      fullPath: '/siswa'
+      preLoaderRoute: typeof UserSiswaRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/_user/ortu': {
+      id: '/_user/ortu'
+      path: '/ortu'
+      fullPath: '/ortu'
+      preLoaderRoute: typeof UserOrtuRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/_user/leaderboard': {
+      id: '/_user/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof UserLeaderboardRouteImport
+      parentRoute: typeof UserRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -221,14 +313,30 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface UserRouteChildren {
+  UserLeaderboardRoute: typeof UserLeaderboardRoute
+  UserOrtuRoute: typeof UserOrtuRoute
+  UserSiswaRoute: typeof UserSiswaRoute
+}
+
+const UserRouteChildren: UserRouteChildren = {
+  UserLeaderboardRoute: UserLeaderboardRoute,
+  UserOrtuRoute: UserOrtuRoute,
+  UserSiswaRoute: UserSiswaRoute,
+}
+
+const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  UserRoute: UserRouteWithChildren,
   EdukasiRoute: EdukasiRoute,
   KonsultasiRoute: KonsultasiRoute,
   KontakRoute: KontakRoute,
   LaporRoute: LaporRoute,
   LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
   TentangRoute: TentangRoute,
 }
 export const routeTree = rootRouteImport

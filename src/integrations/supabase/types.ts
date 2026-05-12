@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      absensi: {
+        Row: {
+          created_at: string
+          id: string
+          keterangan: string | null
+          nis: string
+          status: string
+          tanggal: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keterangan?: string | null
+          nis: string
+          status: string
+          tanggal: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keterangan?: string | null
+          nis?: string
+          status?: string
+          tanggal?: string
+        }
+        Relationships: []
+      }
       consultations: {
         Row: {
           created_at: string
@@ -44,6 +71,42 @@ export type Database = {
         }
         Relationships: []
       }
+      jadwal_pelajaran: {
+        Row: {
+          created_at: string
+          guru: string
+          hari: string
+          id: string
+          jam_mulai: string
+          jam_selesai: string
+          kelas: string
+          mapel: string
+          ruang: string | null
+        }
+        Insert: {
+          created_at?: string
+          guru: string
+          hari: string
+          id?: string
+          jam_mulai: string
+          jam_selesai: string
+          kelas: string
+          mapel: string
+          ruang?: string | null
+        }
+        Update: {
+          created_at?: string
+          guru?: string
+          hari?: string
+          id?: string
+          jam_mulai?: string
+          jam_selesai?: string
+          kelas?: string
+          mapel?: string
+          ruang?: string | null
+        }
+        Relationships: []
+      }
       mood_entries: {
         Row: {
           created_at: string
@@ -62,24 +125,93 @@ export type Database = {
         }
         Relationships: []
       }
+      nilai: {
+        Row: {
+          created_at: string
+          id: string
+          mapel: string
+          nilai: number
+          nis: string
+          semester: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mapel: string
+          nilai: number
+          nis: string
+          semester: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mapel?: string
+          nilai?: number
+          nis?: string
+          semester?: string
+        }
+        Relationships: []
+      }
+      pencapaian: {
+        Row: {
+          badge: string
+          created_at: string
+          deskripsi: string | null
+          id: string
+          nis: string
+          poin: number
+        }
+        Insert: {
+          badge: string
+          created_at?: string
+          deskripsi?: string | null
+          id?: string
+          nis: string
+          poin?: number
+        }
+        Update: {
+          badge?: string
+          created_at?: string
+          deskripsi?: string | null
+          id?: string
+          nis?: string
+          poin?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          avatar_url: string | null
+          child_nis: string | null
           created_at: string
           email: string | null
           full_name: string | null
           id: string
+          kelas: string | null
+          nis: string | null
+          role: string
         }
         Insert: {
+          avatar_url?: string | null
+          child_nis?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id: string
+          kelas?: string | null
+          nis?: string | null
+          role?: string
         }
         Update: {
+          avatar_url?: string | null
+          child_nis?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          kelas?: string | null
+          nis?: string | null
+          role?: string
         }
         Relationships: []
       }
@@ -113,6 +245,36 @@ export type Database = {
           lokasi?: string
           nama?: string
           status?: string
+        }
+        Relationships: []
+      }
+      tugas: {
+        Row: {
+          created_at: string
+          deadline: string
+          deskripsi: string | null
+          id: string
+          judul: string
+          kelas: string
+          mapel: string
+        }
+        Insert: {
+          created_at?: string
+          deadline: string
+          deskripsi?: string | null
+          id?: string
+          judul: string
+          kelas: string
+          mapel: string
+        }
+        Update: {
+          created_at?: string
+          deadline?: string
+          deskripsi?: string | null
+          id?: string
+          judul?: string
+          kelas?: string
+          mapel?: string
         }
         Relationships: []
       }
@@ -153,9 +315,14 @@ export type Database = {
         Returns: boolean
       }
       is_approved_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_parent_of: {
+        Args: { _nis: string; _user_id: string }
+        Returns: boolean
+      }
+      nis_of: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
-      app_role: "admin" | "guru" | "siswa"
+      app_role: "admin" | "guru" | "siswa" | "ortu"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -283,7 +450,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "guru", "siswa"],
+      app_role: ["admin", "guru", "siswa", "ortu"],
     },
   },
 } as const
