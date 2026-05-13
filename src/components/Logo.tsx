@@ -2,25 +2,26 @@ import { Shield } from "lucide-react";
 import { useState } from "react";
 
 /**
- * Logo SMK Wikrama Bogor.
- * Letakkan file gambarmu di: public/logo-wikrama.png
- * (akan otomatis dipakai. Kalau tidak ada / gagal load, fallback ke ikon perisai.)
+ * Logo SMK Wikrama Bogor — tampil dalam bingkai bulat rapi.
+ * File gambar: public/logo-wikrama.png
  */
-export function Logo({ className = "h-9 w-9" }: { className?: string }) {
+export function Logo({ className = "h-10 w-10" }: { className?: string }) {
   const [err, setErr] = useState(false);
-  if (err) {
-    return (
-      <div className={`grid place-items-center rounded-xl gradient-brand text-white shadow-soft ${className}`}>
-        <Shield className="h-5 w-5" />
-      </div>
-    );
-  }
   return (
-    <img
-      src="/logo-wikrama.png"
-      alt="Logo SMK Wikrama Bogor"
-      onError={() => setErr(true)}
-      className={`${className} rounded-xl object-contain bg-white p-1 shadow-soft`}
-    />
+    <div
+      className={`${className} relative shrink-0 grid place-items-center overflow-hidden rounded-full bg-white ring-2 ring-primary/20 shadow-soft`}
+    >
+      {err ? (
+        <Shield className="h-1/2 w-1/2 text-primary" />
+      ) : (
+        <img
+          src="/logo-wikrama.png"
+          alt="Logo SMK Wikrama Bogor"
+          onError={() => setErr(true)}
+          className="h-full w-full object-cover"
+          loading="eager"
+        />
+      )}
+    </div>
   );
 }
