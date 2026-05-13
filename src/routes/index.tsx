@@ -76,8 +76,9 @@ function MoodChecker() {
   ];
   const handle = async (m: typeof moods[number]) => {
     setPicked(m.m);
-    await supabase.from("mood_entries").insert({ mood: m.m });
-    toast.success(m.text);
+    const { error } = await supabase.from("mood_entries").insert({ mood: m.m });
+    if (error) return toast.error("Gagal menyimpan mood", { description: error.message });
+    toast.success(`Mood: ${m.m}`, { description: m.text });
   };
   return (
     <section className="container mx-auto px-4 py-16">
