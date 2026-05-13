@@ -234,6 +234,95 @@ function HomePage() {
 
       <MoodChecker />
 
+      {/* TRUST / KEUNGGULAN */}
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { i: Lock, t: "Privasi Terjaga", d: "Identitas pelapor dilindungi penuh." },
+            { i: Clock, t: "Respon Cepat", d: "Tim BK merespon kurang dari 24 jam." },
+            { i: Award, t: "Tim Bersertifikasi", d: "Konselor profesional berpengalaman." },
+            { i: ShieldCheck, t: "Resmi Sekolah", d: "Didukung pihak SMK Wikrama Bogor." },
+          ].map((x, i) => (
+            <div key={i} className="flex items-start gap-3 rounded-2xl border bg-card p-4 shadow-soft">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl gradient-brand text-white">
+                <x.i className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="font-semibold">{x.t}</div>
+                <div className="text-sm text-muted-foreground">{x.d}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONI */}
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="text-center">
+          <h2 className="font-display text-3xl font-bold sm:text-4xl">Cerita dari warga Wikrama</h2>
+          <p className="mt-3 text-muted-foreground">Pengalaman nyata siswa, orang tua, dan guru.</p>
+        </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {[
+            { n: "Rania, kelas XI RPL", q: "Awalnya takut cerita, tapi BK respon cepat. Sekarang lebih tenang ke sekolah." },
+            { n: "Bpk. Hadi (orang tua)", q: "Saya bisa pantau nilai & kehadiran anak setiap hari. Sangat membantu." },
+            { n: "Bu Kartika (Guru BK)", q: "Laporan terorganisir rapi dan datanya aman. Memudahkan tindak lanjut." },
+          ].map((t, i) => (
+            <Card key={i} className="p-6 shadow-soft hover:shadow-glow transition">
+              <Quote className="h-8 w-8 text-primary/60" />
+              <p className="mt-3 text-sm leading-relaxed">"{t.q}"</p>
+              <div className="mt-4 text-sm font-semibold text-primary">— {t.n}</div>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="mx-auto max-w-3xl">
+          <div className="text-center">
+            <h2 className="font-display text-3xl font-bold sm:text-4xl">Pertanyaan yang sering ditanyakan</h2>
+            <p className="mt-3 text-muted-foreground">Hal yang perlu kamu tahu sebelum menggunakan SafeSchool.</p>
+          </div>
+          <div className="mt-8 space-y-3">
+            {[
+              { q: "Apakah laporan saya benar-benar anonim?", a: "Ya. Kamu boleh tidak mencantumkan nama. Hanya guru BK terpilih yang dapat melihat data laporan." },
+              { q: "Berapa lama laporan ditindaklanjuti?", a: "Maksimal 24 jam pada hari kerja. Kasus darurat ditangani segera oleh BK." },
+              { q: "Apakah orang tua bisa memantau anak?", a: "Bisa. Daftar sebagai akun orang tua dan masukkan NIS anak untuk melihat nilai, absensi, dan progres." },
+              { q: "Apa bedanya konsultasi dengan lapor?", a: "Lapor untuk insiden bullying/kekerasan. Konsultasi untuk curhat & pendampingan psikologis rutin." },
+            ].map((item, i) => (
+              <details key={i} className="group rounded-2xl border bg-card p-5 shadow-soft open:shadow-glow">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
+                  <span>{item.q}</span>
+                  <ChevronDown className="h-5 w-5 shrink-0 transition group-open:rotate-180" />
+                </summary>
+                <p className="mt-3 text-sm text-muted-foreground">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOTLINE DARURAT */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="flex flex-col items-center justify-between gap-4 rounded-3xl border-2 border-destructive/30 bg-destructive/5 p-6 text-center sm:flex-row sm:text-left">
+          <div className="flex items-center gap-4">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-destructive text-white animate-pulse">
+              <Phone className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="font-display text-lg font-bold">Butuh bantuan segera?</div>
+              <div className="text-sm text-muted-foreground">Hotline BK aktif 24/7 untuk kondisi darurat.</div>
+            </div>
+          </div>
+          <a href="tel:08111100200">
+            <Button size="lg" variant="destructive" className="shadow-glow">
+              <Phone className="mr-2 h-4 w-4" /> 0811-1100-200
+            </Button>
+          </a>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="container mx-auto px-4 py-16">
         <Card className="border-none gradient-brand p-10 text-center text-white shadow-glow md:p-16">
