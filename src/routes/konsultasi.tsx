@@ -29,7 +29,15 @@ function KonsulPage() {
   const handle = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.nama || !form.kelas || !form.masalah || !form.jadwal) {
-      toast.error("Mohon lengkapi semua data");
+      toast.warning("Form belum lengkap", {
+        description: "Mohon isi nama, kelas, topik masalah, dan jadwal yang diinginkan.",
+      });
+      return;
+    }
+    if (new Date(form.jadwal).getTime() < Date.now()) {
+      toast.warning("Jadwal tidak valid", {
+        description: "Pilih tanggal & waktu di masa depan agar bisa dijadwalkan.",
+      });
       return;
     }
     setLoading(true);
@@ -38,8 +46,14 @@ function KonsulPage() {
       jadwal: new Date(form.jadwal).toISOString(),
     });
     setLoading(false);
-    if (error) return toast.error(error.message);
-    toast.success("Permintaan konsultasi terkirim ✅");
+    if (error) {
+      return toast.error("Permintaan gagal dikirim", {
+        description: error.message || "Periksa koneksi internetmu lalu coba lagi.",
+      });
+    }
+    toast.success("Permintaan konsultasi terkirim 💬", {
+      description: "Guru BK akan mengonfirmasi jadwalmu dalam 1×24 jam.",
+    });
     setDone(true);
     setForm({ nama: "", kelas: "", masalah: "", jadwal: "" });
   };

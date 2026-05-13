@@ -132,8 +132,8 @@ function HomePage() {
             </h1>
             <p className="mt-5 max-w-lg text-base text-muted-foreground sm:text-lg">
               SafeSchool adalah ruang aman bagi keluarga besar <strong>SMK Wikrama Bogor</strong> —
-              siswa, orang tua, dan guru BK — untuk melaporkan bullying, berkonsultasi, memantau
-              progres akademik, dan saling mendukung.
+              siswa, orang tua, dan guru BK — untuk melaporkan bullying, berkonsultasi, dan saling
+              mendukung tanpa rasa takut.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button asChild size="lg" className="gradient-brand text-white shadow-glow w-full sm:w-auto">
