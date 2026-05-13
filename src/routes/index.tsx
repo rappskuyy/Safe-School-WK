@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ShieldCheck, MessageCircleHeart, BookOpen, HeartHandshake, FileWarning, Sparkles, Play } from "lucide-react";
+import { ArrowRight, ShieldCheck, MessageCircleHeart, BookOpen, HeartHandshake, FileWarning, Sparkles, Play, Phone, ChevronDown, Quote, Lock, Clock, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -12,10 +12,10 @@ import heroImg from "@/assets/hero-students.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SafeSchool — Stop Bullying, Mulai Lingkungan Aman" },
-      { name: "description", content: "Platform pelaporan bullying & konsultasi BK untuk siswa SMA. Aman, anonim, didukung guru BK." },
-      { property: "og:title", content: "SafeSchool" },
-      { property: "og:description", content: "Stop bullying, mulai lingkungan aman." },
+      { title: "SafeSchool SMK Wikrama Bogor — Stop Bullying, Mulai Lingkungan Aman" },
+      { name: "description", content: "Platform resmi SMK Wikrama Bogor untuk pelaporan bullying, konsultasi BK, pemantauan akademik, dan dukungan psikologis siswa." },
+      { property: "og:title", content: "SafeSchool — SMK Wikrama Bogor" },
+      { property: "og:description", content: "Stop bullying, mulai lingkungan aman. Layanan resmi BK SMK Wikrama Bogor." },
     ],
   }),
   component: HomePage,
@@ -121,31 +121,32 @@ function HomePage() {
         <div className="pointer-events-none absolute top-40 right-0 -z-10 h-96 w-96 rounded-full bg-purple-400/30 blur-3xl animate-float [animation-delay:1.5s]" />
         <div className="pointer-events-none absolute bottom-0 left-1/3 -z-10 h-72 w-72 rounded-full bg-pink-400/20 blur-3xl animate-float [animation-delay:3s]" />
 
-        <div className="container mx-auto grid items-center gap-12 px-4 py-20 lg:grid-cols-2 lg:py-28">
+        <div className="container mx-auto grid items-center gap-10 px-4 py-12 sm:py-16 lg:grid-cols-2 lg:gap-12 lg:py-28">
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-primary shadow-soft">
               <ShieldCheck className="h-3.5 w-3.5" /> Platform resmi SMK Wikrama Bogor
             </span>
-            <h1 className="mt-5 font-display text-5xl font-extrabold leading-tight md:text-6xl">
+            <h1 className="mt-5 font-display text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
               Stop Bullying,<br />
               <span className="text-gradient-brand">Mulai Lingkungan Aman</span>
             </h1>
-            <p className="mt-5 max-w-lg text-lg text-muted-foreground">
+            <p className="mt-5 max-w-lg text-base text-muted-foreground sm:text-lg">
               SafeSchool adalah ruang aman bagi keluarga besar <strong>SMK Wikrama Bogor</strong> —
               siswa, orang tua, dan guru BK — untuk melaporkan bullying, berkonsultasi, memantau
               progres akademik, dan saling mendukung.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="gradient-brand text-white shadow-glow">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button asChild size="lg" className="gradient-brand text-white shadow-glow w-full sm:w-auto">
                 <Link to="/lapor">Laporkan Sekarang <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
                 <Link to="/konsultasi">Konsultasi BK</Link>
               </Button>
             </div>
-            <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />100% Anonim</div>
               <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-primary animate-pulse" />Didampingi Guru BK</div>
+              <div className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />Respon &lt; 24 jam</div>
             </div>
           </div>
           <div className="relative animate-float">
