@@ -76,8 +76,9 @@ function MoodChecker() {
   ];
   const handle = async (m: typeof moods[number]) => {
     setPicked(m.m);
-    await supabase.from("mood_entries").insert({ mood: m.m });
-    toast.success(m.text);
+    const { error } = await supabase.from("mood_entries").insert({ mood: m.m });
+    if (error) return toast.error("Gagal menyimpan mood", { description: error.message });
+    toast.success(`Mood: ${m.m}`, { description: m.text });
   };
   return (
     <section className="container mx-auto px-4 py-16">
@@ -132,8 +133,8 @@ function HomePage() {
             </h1>
             <p className="mt-5 max-w-lg text-base text-muted-foreground sm:text-lg">
               SafeSchool adalah ruang aman bagi keluarga besar <strong>SMK Wikrama Bogor</strong> —
-              siswa, orang tua, dan guru BK — untuk melaporkan bullying, berkonsultasi, memantau
-              progres akademik, dan saling mendukung.
+              siswa, orang tua, dan guru BK — untuk melaporkan bullying, berkonsultasi, dan saling
+              mendukung tanpa rasa takut.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button asChild size="lg" className="gradient-brand text-white shadow-glow w-full sm:w-auto">

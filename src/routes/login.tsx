@@ -88,13 +88,22 @@ function SupabaseLoginForm({ role, onSuccess }: { role: "siswa" | "ortu"; onSucc
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password) {
+      return toast.warning("Email & password wajib diisi", {
+        description: "Lengkapi kedua kolom untuk melanjutkan.",
+      });
+    }
     setLoading(true);
     try {
       await signInUser(email.trim(), password);
-      toast.success(`Selamat datang!`);
+      toast.success("Selamat datang kembali 🎉", {
+        description: "Mengarahkan ke dashboardmu...",
+      });
       onSuccess();
     } catch (err: any) {
-      toast.error(err.message || "Login gagal");
+      toast.error("Login gagal", {
+        description: err.message || "Periksa email & password kamu, lalu coba lagi.",
+      });
     } finally {
       setLoading(false);
     }
@@ -140,12 +149,23 @@ function TeacherLoginForm({ onSuccess }: { onSuccess: () => void }) {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!u.trim() || !p) {
+      return toast.warning("Username & password wajib diisi", {
+        description: "Lengkapi kedua kolom untuk melanjutkan.",
+      });
+    }
     setLoading(true);
     setTimeout(() => {
       const t = loginTeacher(u.trim(), p);
       setLoading(false);
-      if (!t) return toast.error("Username atau password salah");
-      toast.success(`Selamat datang, ${t.nama}!`);
+      if (!t) {
+        return toast.error("Login guru gagal", {
+          description: "Username atau password salah. Coba akun demo: bukartika / safe123.",
+        });
+      }
+      toast.success(`Selamat datang, ${t.nama} 👩‍🏫`, {
+        description: "Mengarahkan ke dashboard guru BK...",
+      });
       onSuccess();
     }, 300);
   };

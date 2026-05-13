@@ -85,8 +85,16 @@ function RegForm({ role, onDone }: { role: "siswa" | "ortu"; onDone: () => void 
     e.preventDefault();
     try {
       const parsed = baseSchema.parse(form);
-      if (role === "siswa" && !form.nis.trim()) return toast.error("NIS wajib diisi");
-      if (role === "ortu" && !form.child_nis.trim()) return toast.error("NIS anak wajib diisi");
+      if (role === "siswa" && !form.nis.trim()) {
+        return toast.warning("NIS wajib diisi", {
+          description: "Masukkan Nomor Induk Siswa kamu untuk membuat akun siswa.",
+        });
+      }
+      if (role === "ortu" && !form.child_nis.trim()) {
+        return toast.warning("NIS anak wajib diisi", {
+          description: "Masukkan NIS anak agar Anda bisa memantau aktivitas BK-nya.",
+        });
+      }
       setLoading(true);
       await signUpUser({
         ...parsed,
@@ -95,10 +103,14 @@ function RegForm({ role, onDone }: { role: "siswa" | "ortu"; onDone: () => void 
         kelas: role === "siswa" ? form.kelas.trim() : undefined,
         child_nis: role === "ortu" ? form.child_nis.trim() : undefined,
       });
-      toast.success("Akun berhasil dibuat! Silakan login.");
+      toast.success("Akun berhasil dibuat 🎉", {
+        description: "Silakan masuk dengan email & password yang baru kamu daftarkan.",
+      });
       onDone();
     } catch (err: any) {
-      toast.error(err?.errors?.[0]?.message || err.message || "Pendaftaran gagal");
+      toast.error("Pendaftaran gagal", {
+        description: err?.errors?.[0]?.message || err.message || "Periksa data kamu lalu coba lagi.",
+      });
     } finally {
       setLoading(false);
     }

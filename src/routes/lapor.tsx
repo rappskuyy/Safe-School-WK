@@ -32,7 +32,15 @@ function LaporPage() {
   const handle = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.kelas || !form.jenis || !form.cerita || !form.lokasi) {
-      toast.error("Mohon lengkapi semua data wajib");
+      toast.warning("Form belum lengkap", {
+        description: "Mohon isi kelas, jenis, cerita, dan lokasi kejadian sebelum mengirim.",
+      });
+      return;
+    }
+    if (form.cerita.trim().length < 20) {
+      toast.warning("Cerita terlalu singkat", {
+        description: "Tuliskan kejadian minimal 20 karakter agar tim BK bisa memahami situasi.",
+      });
       return;
     }
     setLoading(true);
@@ -44,8 +52,14 @@ function LaporPage() {
       lokasi: form.lokasi,
     });
     setLoading(false);
-    if (error) return toast.error(error.message);
-    toast.success("Laporan berhasil dikirim ✅");
+    if (error) {
+      return toast.error("Laporan gagal terkirim", {
+        description: error.message || "Coba lagi sebentar atau hubungi hotline BK.",
+      });
+    }
+    toast.success("Laporan berhasil dikirim 💜", {
+      description: "Tim BK akan menindaklanjuti maksimal 24 jam. Identitasmu aman.",
+    });
     setDone(true);
     setForm({ nama: "", kelas: "", jenis: "", cerita: "", lokasi: "" });
   };

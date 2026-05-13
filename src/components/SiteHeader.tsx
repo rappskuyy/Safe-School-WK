@@ -31,12 +31,12 @@ export function SiteHeader() {
   const doLogoutTeacher = () => {
     logoutTeacher();
     setTeacher(null);
-    toast.success("Berhasil keluar");
+    toast.success("Sampai jumpa, Bu/Pak 👋", { description: "Sesi guru berhasil diakhiri dengan aman." });
     navigate({ to: "/" });
   };
   const doLogoutUser = async () => {
     await signOutUser();
-    toast.success("Berhasil keluar");
+    toast.success("Berhasil keluar 👋", { description: "Sesi kamu sudah ditutup. Sampai bertemu lagi!" });
     navigate({ to: "/" });
   };
 
