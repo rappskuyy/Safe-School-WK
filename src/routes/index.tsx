@@ -213,6 +213,8 @@ function HomePage() {
 
       <StatsBlock />
 
+      <PledgeWidget />
+
       {/* POSTER GALLERY */}
       <section className="container mx-auto px-4 py-12 sm:py-16">
         <div className="rounded-3xl gradient-hero p-6 text-white shadow-glow sm:p-10 md:p-12">
@@ -253,6 +255,8 @@ function HomePage() {
       </section>
 
       <MoodChecker />
+
+      <MentalCheck />
 
       {/* TRUST / KEUNGGULAN */}
       <section className="container mx-auto px-4 py-12 sm:py-16">
@@ -342,6 +346,8 @@ function HomePage() {
           </a>
         </div>
       </section>
+
+      <KindnessWall />
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-16">
