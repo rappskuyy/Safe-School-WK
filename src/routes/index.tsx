@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ShieldCheck, MessageCircleHeart, BookOpen, HeartHandshake, FileWarning, Sparkles, Play, Phone, ChevronDown, Quote, Lock, Clock, Award } from "lucide-react";
+import { ArrowRight, ShieldCheck, MessageCircleHeart, BookOpen, HeartHandshake, FileWarning, Sparkles, Phone, ChevronDown, Quote, Lock, Clock, Award, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -8,6 +8,9 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import heroImg from "@/assets/hero-students.jpg";
+import posterStop from "@/assets/poster-stop-bullying.jpg";
+import posterMental from "@/assets/poster-mental-health.jpg";
+import posterFriend from "@/assets/poster-help-friend.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
