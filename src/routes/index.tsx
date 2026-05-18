@@ -11,6 +11,9 @@ import heroImg from "@/assets/hero-students.jpg";
 import posterStop from "@/assets/poster-stop-bullying.jpg";
 import posterMental from "@/assets/poster-mental-health.jpg";
 import posterFriend from "@/assets/poster-help-friend.jpg";
+import { PledgeWidget } from "@/components/PledgeWidget";
+import { KindnessWall } from "@/components/KindnessWall";
+import { MentalCheck } from "@/components/MentalCheck";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -210,6 +213,8 @@ function HomePage() {
 
       <StatsBlock />
 
+      <PledgeWidget />
+
       {/* POSTER GALLERY */}
       <section className="container mx-auto px-4 py-12 sm:py-16">
         <div className="rounded-3xl gradient-hero p-6 text-white shadow-glow sm:p-10 md:p-12">
@@ -250,6 +255,8 @@ function HomePage() {
       </section>
 
       <MoodChecker />
+
+      <MentalCheck />
 
       {/* TRUST / KEUNGGULAN */}
       <section className="container mx-auto px-4 py-12 sm:py-16">
@@ -339,6 +346,8 @@ function HomePage() {
           </a>
         </div>
       </section>
+
+      <KindnessWall />
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-16">
