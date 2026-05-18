@@ -11,6 +11,9 @@ import heroImg from "@/assets/hero-students.jpg";
 import posterStop from "@/assets/poster-stop-bullying.jpg";
 import posterMental from "@/assets/poster-mental-health.jpg";
 import posterFriend from "@/assets/poster-help-friend.jpg";
+import { PledgeWidget } from "@/components/PledgeWidget";
+import { KindnessWall } from "@/components/KindnessWall";
+import { MentalCheck } from "@/components/MentalCheck";
 
 export const Route = createFileRoute("/")({
   head: () => ({
