@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth-context";
+import { FloatingSOS } from "@/components/FloatingSOS";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -82,6 +83,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Outlet />
+        <FloatingSOS />
         <Toaster richColors position="top-center" />
       </AuthProvider>
     </QueryClientProvider>
