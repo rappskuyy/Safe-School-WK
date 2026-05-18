@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ShieldCheck, MessageCircleHeart, BookOpen, HeartHandshake, FileWarning, Sparkles, Play, Phone, ChevronDown, Quote, Lock, Clock, Award } from "lucide-react";
+import { ArrowRight, ShieldCheck, MessageCircleHeart, BookOpen, HeartHandshake, FileWarning, Sparkles, Phone, ChevronDown, Quote, Lock, Clock, Award, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -8,6 +8,9 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import heroImg from "@/assets/hero-students.jpg";
+import posterStop from "@/assets/poster-stop-bullying.jpg";
+import posterMental from "@/assets/poster-mental-health.jpg";
+import posterFriend from "@/assets/poster-help-friend.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -207,27 +210,40 @@ function HomePage() {
 
       <StatsBlock />
 
-      {/* VIDEO PREVIEW */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="rounded-3xl gradient-hero p-8 text-white md:p-12">
-          <div className="grid items-center gap-8 md:grid-cols-2">
+      {/* POSTER GALLERY */}
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="rounded-3xl gradient-hero p-6 text-white shadow-glow sm:p-10 md:p-12">
+          <div className="grid items-center gap-8 lg:grid-cols-2">
             <div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">Belajar dari video edukasi pilihan</h2>
-              <p className="mt-3 opacity-90">
-                Tonton video singkat tentang anti-bullying, kesehatan mental, dan tips dukung teman.
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur">
+                <ImageIcon className="h-3.5 w-3.5" /> Kampanye visual
+              </span>
+              <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl md:text-4xl">
+                Poster anti-bullying untuk dibagikan
+              </h2>
+              <p className="mt-3 text-sm opacity-90 sm:text-base">
+                Ambil, cetak, tempel di mading kelas. Gerakan kecilmu bisa menyelamatkan teman.
               </p>
               <Button asChild size="lg" variant="secondary" className="mt-6">
-                <Link to="/edukasi"><Play className="mr-2 h-4 w-4" />Tonton Video</Link>
+                <Link to="/edukasi"><ImageIcon className="mr-2 h-4 w-4" />Lihat semua poster</Link>
               </Button>
             </div>
-            <div className="aspect-video overflow-hidden rounded-2xl bg-black/30 shadow-glow">
-              <iframe
-                src="https://www.youtube.com/embed/7-K_VTtR0v0"
-                title="Anti-Bullying"
-                className="h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              {[posterStop, posterMental, posterFriend].slice(0, 3).map((src, i) => (
+                <div
+                  key={i}
+                  className={`overflow-hidden rounded-2xl bg-black/20 shadow-glow ${i === 0 ? "col-span-2 aspect-video" : "aspect-square"}`}
+                >
+                  <img
+                    src={src}
+                    alt={`Poster anti-bullying ${i + 1}`}
+                    width={1024}
+                    height={576}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
