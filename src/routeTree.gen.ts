@@ -19,6 +19,7 @@ import { Route as EdukasiRouteImport } from './routes/edukasi'
 import { Route as UserRouteImport } from './routes/_user'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as UserSiswaRouteImport } from './routes/_user/siswa'
 import { Route as UserOrtuRouteImport } from './routes/_user/ortu'
 import { Route as UserLeaderboardRouteImport } from './routes/_user/leaderboard'
@@ -72,6 +73,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserSiswaRoute = UserSiswaRouteImport.update({
   id: '/siswa',
   path: '/siswa',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/leaderboard': typeof UserLeaderboardRoute
   '/ortu': typeof UserOrtuRoute
   '/siswa': typeof UserSiswaRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/leaderboard': typeof UserLeaderboardRoute
   '/ortu': typeof UserOrtuRoute
   '/siswa': typeof UserSiswaRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/_user/leaderboard': typeof UserLeaderboardRoute
   '/_user/ortu': typeof UserOrtuRoute
   '/_user/siswa': typeof UserSiswaRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/ortu'
     | '/siswa'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/ortu'
     | '/siswa'
+    | '/api/chat'
   id:
     | '__root__'
     | '/'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/_user/leaderboard'
     | '/_user/ortu'
     | '/_user/siswa'
+    | '/api/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,6 +208,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   TentangRoute: typeof TentangRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -270,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_user/siswa': {
       id: '/_user/siswa'
       path: '/siswa'
@@ -338,6 +358,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   TentangRoute: TentangRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
