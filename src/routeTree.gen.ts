@@ -16,6 +16,7 @@ import { Route as LaporRouteImport } from './routes/lapor'
 import { Route as KontakRouteImport } from './routes/kontak'
 import { Route as KonsultasiRouteImport } from './routes/konsultasi'
 import { Route as EdukasiRouteImport } from './routes/edukasi'
+import { Route as CybersecurityRouteImport } from './routes/cybersecurity'
 import { Route as UserRouteImport } from './routes/_user'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -60,6 +61,11 @@ const EdukasiRoute = EdukasiRouteImport.update({
   path: '/edukasi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CybersecurityRoute = CybersecurityRouteImport.update({
+  id: '/cybersecurity',
+  path: '/cybersecurity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserRoute = UserRouteImport.update({
   id: '/_user',
   getParentRoute: () => rootRouteImport,
@@ -101,6 +107,7 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cybersecurity': typeof CybersecurityRoute
   '/edukasi': typeof EdukasiRoute
   '/konsultasi': typeof KonsultasiRoute
   '/kontak': typeof KontakRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cybersecurity': typeof CybersecurityRoute
   '/edukasi': typeof EdukasiRoute
   '/konsultasi': typeof KonsultasiRoute
   '/kontak': typeof KontakRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_user': typeof UserRouteWithChildren
+  '/cybersecurity': typeof CybersecurityRoute
   '/edukasi': typeof EdukasiRoute
   '/konsultasi': typeof KonsultasiRoute
   '/kontak': typeof KontakRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cybersecurity'
     | '/edukasi'
     | '/konsultasi'
     | '/kontak'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cybersecurity'
     | '/edukasi'
     | '/konsultasi'
     | '/kontak'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/_user'
+    | '/cybersecurity'
     | '/edukasi'
     | '/konsultasi'
     | '/kontak'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   UserRoute: typeof UserRouteWithChildren
+  CybersecurityRoute: typeof CybersecurityRoute
   EdukasiRoute: typeof EdukasiRoute
   KonsultasiRoute: typeof KonsultasiRoute
   KontakRoute: typeof KontakRoute
@@ -260,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/edukasi'
       fullPath: '/edukasi'
       preLoaderRoute: typeof EdukasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cybersecurity': {
+      id: '/cybersecurity'
+      path: '/cybersecurity'
+      fullPath: '/cybersecurity'
+      preLoaderRoute: typeof CybersecurityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_user': {
@@ -351,6 +371,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   UserRoute: UserRouteWithChildren,
+  CybersecurityRoute: CybersecurityRoute,
   EdukasiRoute: EdukasiRoute,
   KonsultasiRoute: KonsultasiRoute,
   KontakRoute: KontakRoute,

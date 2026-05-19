@@ -14,6 +14,7 @@ const links = [
   { to: "/lapor", label: "Lapor" },
   { to: "/konsultasi", label: "Konsultasi" },
   { to: "/edukasi", label: "Edukasi" },
+  { to: "/cybersecurity", label: "Cyber Safety" },
   { to: "/kontak", label: "Kontak" },
 ] as const;
 
