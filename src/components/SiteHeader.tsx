@@ -8,14 +8,14 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Logo } from "@/components/Logo";
 
+// ✅ Cyber Safety DIHAPUS, Lapor diubah jadi "Lapor BK"
 const links = [
-  { to: "/", label: "Home" },
-  { to: "/tentang", label: "Tentang" },
-  { to: "/lapor", label: "Lapor" },
-  { to: "/konsultasi", label: "Konsultasi" },
-  { to: "/edukasi", label: "Edukasi" },
-  { to: "/cybersecurity", label: "Cyber Safety" },
-  { to: "/kontak", label: "Kontak" },
+  { to: "/",          label: "Home" },
+  { to: "/tentang",   label: "Tentang" },
+  { to: "/lapor",     label: "Lapor BK" },
+  { to: "/konsultasi",label: "Konsultasi" },
+  { to: "/edukasi",   label: "Edukasi" },
+  { to: "/kontak",    label: "Kontak" },
 ] as const;
 
 export function SiteHeader() {
@@ -42,9 +42,9 @@ export function SiteHeader() {
   };
 
   const dashboardLink =
-    teacher ? "/dashboard" : profile?.role === "ortu" ? "/ortu" : profile?.role === "siswa" ? "/siswa" : null;
+    teacher ? "/dashboard" : profile?.role === "ortu" ? "/ortu" : null;
   const dashboardLabel =
-    teacher ? "Dashboard Guru" : profile?.role === "ortu" ? "Dashboard Ortu" : "Dashboard Siswa";
+    teacher ? "Dashboard Guru" : profile?.role === "ortu" ? "Dashboard Ortu" : "Dashboard";
   const isLoggedIn = teacher || user;
 
   return (
@@ -71,13 +71,6 @@ export function SiteHeader() {
               </Link>
             </li>
           ))}
-          {user && (
-            <li>
-              <Link to="/leaderboard" className={`rounded-lg px-3 py-2 text-sm font-medium hover:text-primary ${path === "/leaderboard" ? "text-primary" : "text-muted-foreground"}`}>
-                <Trophy className="mr-1 inline h-4 w-4" />Leaderboard
-              </Link>
-            </li>
-          )}
         </ul>
 
         <div className="hidden items-center gap-2 lg:flex">
@@ -121,11 +114,6 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
-            {user && (
-              <li>
-                <Link to="/leaderboard" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2 text-sm font-medium">🏆 Leaderboard</Link>
-              </li>
-            )}
             <li className="pt-2 space-y-2">
               {isLoggedIn ? (
                 <>
@@ -134,7 +122,9 @@ export function SiteHeader() {
                       <Link to={dashboardLink} onClick={() => setOpen(false)}>{dashboardLabel}</Link>
                     </Button>
                   )}
-                  <Button onClick={() => { teacher ? doLogoutTeacher() : doLogoutUser(); setOpen(false); }} variant="outline" size="sm" className="w-full">Keluar</Button>
+                  <Button onClick={() => { teacher ? doLogoutTeacher() : doLogoutUser(); setOpen(false); }} variant="outline" size="sm" className="w-full">
+                    Keluar
+                  </Button>
                 </>
               ) : (
                 <>

@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MoodCheckAlert } from "@/components/MoodCheckAlert";
 import {
   Outlet, Link, createRootRouteWithContext, useRouter,
   HeadContent, Scripts,
@@ -82,6 +83,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <MoodCheckAlert /> 
         <Outlet />
         <FloatingChatbot />
         <Toaster richColors position="top-center" />
