@@ -16,22 +16,21 @@ export const Route = createFileRoute("/_user/ortu")({
 
 function OrtuDashboard() {
   const { profile } = useAuth();
-  const [anak, setAnak] = useState<any>(null);
   const [reports, setReports] = useState<any[]>([]);
   const [konsul, setKonsul] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!profile?.child_nis) return;
-    const nis = profile.child_nis;
+    // RLS di Supabase otomatis memfilter laporan berdasarkan child_name & child_kelas
+    // yang sudah dikonfigurasi di policy "Ortu can view reports of their child"
     (async () => {
-      const [a, r, k] = await Promise.all([
-        supabase.from("profiles").select("*").eq("nis", nis).maybeSingle(),
+      const [r, k] = await Promise.all([
         supabase.from("reports").select("*").order("created_at", { ascending: false }).limit(8),
         supabase.from("consultations").select("*").order("created_at", { ascending: false }).limit(8),
       ]);
-      setAnak(a.data);
       setReports(r.data || []);
       setKonsul(k.data || []);
+      setLoading(false);
     })();
   }, [profile]);
 
@@ -43,6 +42,7 @@ function OrtuDashboard() {
       <SiteHeader />
 
       <main className="container mx-auto px-4 py-6 sm:py-8">
+        {/* Hero card */}
         <Card className="relative overflow-hidden border-0 bg-gradient-to-r from-purple-600 to-indigo-600 p-5 text-white shadow-glow sm:p-6">
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
           <div className="relative">
@@ -58,24 +58,28 @@ function OrtuDashboard() {
             <Heart className="h-5 w-5 text-pink-500" />
             <h2 className="font-display text-lg font-bold">Profil Anak</h2>
           </div>
-          {anak ? (
-            <div className="mt-3 grid gap-2 sm:grid-cols-3">
-              <Info label="Nama" value={anak.full_name || "—"} />
-              <Info label="NIS" value={anak.nis || "—"} />
-              <Info label="Kelas" value={anak.kelas || "—"} />
+          {profile?.child_name ? (
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <Info label="Nama Anak" value={profile.child_name} />
+              <Info label="Kelas" value={profile.child_kelas || "—"} />
             </div>
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
-              Data anak (NIS <code>{profile?.child_nis}</code>) belum terdaftar. Minta anak untuk mendaftar dulu.
+              Data anak belum dilengkapi. Silakan hubungi admin sekolah.
             </p>
           )}
         </Card>
 
         {/* Stat */}
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <StatCard icon={FileWarning} label="Laporan Aktif" value={aktifReport} color="from-rose-500 to-pink-600" />
-          <StatCard icon={MessageCircleHeart} label="Konsultasi Aktif" value={aktifKonsul} color="from-blue-500 to-indigo-600" />
-          <StatCard icon={ShieldCheck} label="Status Pendampingan" value={aktifReport + aktifKonsul > 0 ? "Aktif" : "Aman"} color="from-emerald-500 to-teal-600" />
+          <StatCard icon={FileWarning} label="Laporan Aktif" value={loading ? "..." : aktifReport} color="from-rose-500 to-pink-600" />
+          <StatCard icon={MessageCircleHeart} label="Konsultasi Aktif" value={loading ? "..." : aktifKonsul} color="from-blue-500 to-indigo-600" />
+          <StatCard
+            icon={ShieldCheck}
+            label="Status Pendampingan"
+            value={loading ? "..." : aktifReport + aktifKonsul > 0 ? "Aktif" : "Aman"}
+            color="from-emerald-500 to-teal-600"
+          />
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
@@ -84,36 +88,48 @@ function OrtuDashboard() {
             <h3 className="mb-3 flex items-center gap-2 font-display text-lg font-bold">
               <BookOpen className="h-5 w-5 text-primary" /> Aktivitas BK Terbaru
             </h3>
-            <div className="space-y-3">
-              <div>
-                <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Laporan</p>
-                {reports.length === 0 ? (
-                  <p className="rounded-lg border border-dashed p-3 text-center text-sm text-muted-foreground">Belum ada laporan.</p>
-                ) : reports.map((r) => (
-                  <div key={r.id} className="mb-2 rounded-lg border p-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="font-medium">{r.jenis}</span>
-                      <StatusBadge status={r.status} />
+            {loading ? (
+              <p className="text-sm text-muted-foreground">Memuat data...</p>
+            ) : (
+              <div className="space-y-3">
+                <div>
+                  <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Laporan</p>
+                  {reports.length === 0 ? (
+                    <p className="rounded-lg border border-dashed p-3 text-center text-sm text-muted-foreground">
+                      Belum ada laporan yang berkaitan dengan anak kamu.
+                    </p>
+                  ) : reports.map((r) => (
+                    <div key={r.id} className="mb-2 rounded-lg border p-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="font-medium">{r.kategori} — {r.jenis}</span>
+                        <StatusBadge status={r.status} />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {r.nama} · {r.kelas} · {new Date(r.created_at).toLocaleDateString("id-ID")}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">{r.kelas} · {new Date(r.created_at).toLocaleDateString("id-ID")}</p>
-                  </div>
-                ))}
-              </div>
-              <div>
-                <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Konsultasi</p>
-                {konsul.length === 0 ? (
-                  <p className="rounded-lg border border-dashed p-3 text-center text-sm text-muted-foreground">Belum ada konsultasi.</p>
-                ) : konsul.map((k) => (
-                  <div key={k.id} className="mb-2 rounded-lg border p-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="font-medium line-clamp-1">{k.nama}</span>
-                      <StatusBadge status={k.status} />
+                  ))}
+                </div>
+                <div>
+                  <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Konsultasi</p>
+                  {konsul.length === 0 ? (
+                    <p className="rounded-lg border border-dashed p-3 text-center text-sm text-muted-foreground">
+                      Belum ada konsultasi.
+                    </p>
+                  ) : konsul.map((k) => (
+                    <div key={k.id} className="mb-2 rounded-lg border p-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="font-medium line-clamp-1">{k.nama}</span>
+                        <StatusBadge status={k.status} />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {k.kelas} · {new Date(k.jadwal).toLocaleString("id-ID")}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">{k.kelas} · {new Date(k.jadwal).toLocaleString("id-ID")}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             <Button asChild variant="ghost" size="sm" className="mt-3 w-full">
               <Link to="/kontak"><Calendar className="mr-1 h-4 w-4" />Hubungi BK Sekolah</Link>
             </Button>
@@ -166,6 +182,7 @@ function StatusBadge({ status }: { status: string }) {
     baru: "bg-blue-500",
     menunggu: "bg-blue-500",
     diproses: "bg-amber-500",
+    dijadwalkan: "bg-amber-500",
     selesai: "bg-emerald-500",
   };
   return <Badge className={`${map[s] || "bg-muted-foreground"} capitalize`}>{status}</Badge>;
@@ -182,6 +199,7 @@ function StatCard({ icon: Icon, label, value, color }: { icon: any; label: strin
     </Card>
   );
 }
+
 function Info({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border bg-muted/30 p-3">

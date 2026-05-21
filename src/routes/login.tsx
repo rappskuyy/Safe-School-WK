@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogIn, Eye, EyeOff, KeyRound, User, GraduationCap, Users, Mail } from "lucide-react";
+import { LogIn, Eye, EyeOff, KeyRound, User, Users, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ function LoginPage() {
   // Auto redirect kalau sudah login
   useEffect(() => {
     if (getTeacher()) navigate({ to: "/dashboard" });
-    else if (user && profile?.role === "siswa") navigate({ to: "/siswa" });
+    else if (user && profile?.role === "guru") navigate({ to: "/dashboard" });
     else if (user && profile?.role === "ortu") navigate({ to: "/ortu" });
   }, [user, profile, navigate]);
 
@@ -53,18 +53,14 @@ function LoginPage() {
             <p className="mt-1 text-sm text-muted-foreground">Pilih jenis akun kamu</p>
           </div>
 
-          <Tabs defaultValue="siswa" className="mt-5">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="siswa"><GraduationCap className="mr-1 h-4 w-4" />Siswa</TabsTrigger>
-              <TabsTrigger value="ortu"><Users className="mr-1 h-4 w-4" />Ortu</TabsTrigger>
+          <Tabs defaultValue="ortu" className="mt-5">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="ortu"><Users className="mr-1 h-4 w-4" />Orang Tua</TabsTrigger>
               <TabsTrigger value="guru"><User className="mr-1 h-4 w-4" />Guru</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="siswa" className="mt-4">
-              <SupabaseLoginForm role="siswa" onSuccess={() => navigate({ to: "/siswa" })} />
-            </TabsContent>
             <TabsContent value="ortu" className="mt-4">
-              <SupabaseLoginForm role="ortu" onSuccess={() => navigate({ to: "/ortu" })} />
+              <SupabaseLoginForm onSuccess={() => navigate({ to: "/ortu" })} />
             </TabsContent>
             <TabsContent value="guru" className="mt-4">
               <TeacherLoginForm onSuccess={() => navigate({ to: "/dashboard" })} />
@@ -72,7 +68,10 @@ function LoginPage() {
           </Tabs>
 
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Kembali ke <Link to="/" className="text-primary hover:underline">halaman utama</Link>
+            Kembali ke{" "}
+            <Link to="/" className="text-primary hover:underline">
+              halaman utama
+            </Link>
           </p>
         </Card>
       </main>
@@ -80,7 +79,7 @@ function LoginPage() {
   );
 }
 
-function SupabaseLoginForm({ role, onSuccess }: { role: "siswa" | "ortu"; onSuccess: () => void }) {
+function SupabaseLoginForm({ onSuccess }: { onSuccess: () => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
@@ -115,26 +114,45 @@ function SupabaseLoginForm({ role, onSuccess }: { role: "siswa" | "ortu"; onSucc
         <Label>Email</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input required type="email" placeholder="email@contoh.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" />
+          <Input
+            required
+            type="email"
+            placeholder="email@contoh.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="pl-9"
+          />
         </div>
       </div>
       <div className="space-y-1.5">
         <Label>Password</Label>
         <div className="relative">
           <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input required type={show ? "text" : "password"} placeholder="••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-9 pr-10" />
-          <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          <Input
+            required
+            type={show ? "text" : "password"}
+            placeholder="••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="pl-9 pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShow(!show)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          >
+            {show ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
           </button>
         </div>
       </div>
       <Button type="submit" disabled={loading} size="lg" className="w-full gradient-brand text-white shadow-glow">
-        <LogIn className="mr-2 h-4 w-4" />{loading ? "Masuk..." : "Masuk"}
+        <LogIn className="mr-2 h-4 w-4" />
+        {loading ? "Masuk..." : "Masuk"}
       </Button>
       <p className="text-center text-xs text-muted-foreground">
         Belum punya akun?{" "}
-        <Link to="/register" search={{ role }} className="text-primary font-medium hover:underline">
-          Daftar sebagai {role === "siswa" ? "Siswa" : "Orang Tua"}
+        <Link to="/register" className="text-primary font-medium hover:underline">
+          Daftar sebagai Orang Tua
         </Link>
       </p>
     </form>
@@ -176,25 +194,45 @@ function TeacherLoginForm({ onSuccess }: { onSuccess: () => void }) {
         <Label>Username</Label>
         <div className="relative">
           <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input required placeholder="bukartika" value={u} onChange={(e) => setU(e.target.value)} className="pl-9" />
+          <Input
+            required
+            placeholder="bukartika"
+            value={u}
+            onChange={(e) => setU(e.target.value)}
+            className="pl-9"
+          />
         </div>
       </div>
       <div className="space-y-1.5">
         <Label>Password</Label>
         <div className="relative">
           <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input required type={show ? "text" : "password"} placeholder="••••••" value={p} onChange={(e) => setP(e.target.value)} className="pl-9 pr-10" />
-          <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          <Input
+            required
+            type={show ? "text" : "password"}
+            placeholder="••••••"
+            value={p}
+            onChange={(e) => setP(e.target.value)}
+            className="pl-9 pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShow(!show)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          >
+            {show ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
           </button>
         </div>
       </div>
       <Button type="submit" disabled={loading} size="lg" className="w-full gradient-brand text-white shadow-glow">
-        <LogIn className="mr-2 h-4 w-4" />{loading ? "Memeriksa..." : "Masuk"}
+        <LogIn className="mr-2 h-4 w-4" />
+        {loading ? "Memeriksa..." : "Masuk"}
       </Button>
       <div className="rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground">
-        <p className="font-medium text-foreground">Akun demo guru:</p>
-        <p className="mt-1"><code>bukartika</code> / <code>safe123</code></p>
+        <p className="font-medium text-foreground">Akun demo guru BK:</p>
+        <p className="mt-1">
+          <code>bukartika</code> / <code>safe123</code>
+        </p>
       </div>
     </form>
   );

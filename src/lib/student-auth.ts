@@ -1,5 +1,8 @@
 // =====================================================
-// Auth siswa & ortu lewat Lovable Cloud (Supabase)
+// Auth Ortu lewat Supabase Auth
+// =====================================================
+// Skema baru hanya mengenal 2 role: 'guru' dan 'ortu'
+// Siswa TIDAK punya akun — laporan bisa anonim tanpa login.
 // =====================================================
 import { supabase } from "@/integrations/supabase/client";
 
@@ -7,10 +10,9 @@ export type SignUpInput = {
   email: string;
   password: string;
   full_name: string;
-  role: "siswa" | "ortu";
-  nis?: string;       // untuk siswa = NIS sendiri
-  kelas?: string;     // untuk siswa
-  child_nis?: string; // untuk ortu = NIS anak
+  role: "ortu";        // hanya ortu yang bisa daftar mandiri
+  child_name: string;  // nama anak
+  child_kelas: string; // kelas anak (contoh: "XI RPL 1")
 };
 
 export async function signUpUser(input: SignUpInput) {
@@ -18,13 +20,12 @@ export async function signUpUser(input: SignUpInput) {
     email: input.email,
     password: input.password,
     options: {
-      emailRedirectTo: window.location.origin,
+      emailRedirectTo: typeof window !== "undefined" ? window.location.origin : undefined,
       data: {
         full_name: input.full_name,
         role: input.role,
-        nis: input.nis ?? null,
-        kelas: input.kelas ?? null,
-        child_nis: input.child_nis ?? null,
+        child_name: input.child_name,
+        child_kelas: input.child_kelas,
       },
     },
   });

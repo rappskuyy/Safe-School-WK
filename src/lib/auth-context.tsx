@@ -2,14 +2,15 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 
+// Sesuai skema profiles baru (supabase_full_migration.sql)
 export type UserProfile = {
   id: string;
-  full_name: string | null;
+  full_name: string;
   email: string | null;
-  role: string | null;
-  nis: string | null;
-  kelas: string | null;
-  child_nis: string | null;
+  role: string;         // 'guru' | 'ortu'
+  child_name: string | null;   // khusus ortu: nama anak
+  child_kelas: string | null;  // khusus ortu: kelas anak
+  avatar_url: string | null;
 };
 
 interface AuthCtx {
@@ -17,6 +18,8 @@ interface AuthCtx {
   session: Session | null;
   profile: UserProfile | null;
   loading: boolean;
+  isGuru: boolean;
+  isOrtu: boolean;
   signOut: () => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -30,10 +33,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async (uid?: string) => {
-    if (!uid) return setProfile(null);
+    if (!uid) {
+      setProfile(null);
+      return;
+    }
     const { data } = await supabase
       .from("profiles")
-      .select("id, full_name, email, role, nis, kelas, child_nis")
+      .select("id, full_name, email, role, child_name, child_kelas, avatar_url")
       .eq("id", uid)
       .maybeSingle();
     setProfile(data as UserProfile | null);
@@ -53,11 +59,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  const isGuru = profile?.role === "guru";
+  const isOrtu = profile?.role === "ortu";
+
   return (
     <Ctx.Provider
       value={{
-        user, session, profile, loading,
-        signOut: async () => { await supabase.auth.signOut(); setProfile(null); },
+        user,
+        session,
+        profile,
+        loading,
+        isGuru,
+        isOrtu,
+        signOut: async () => {
+          await supabase.auth.signOut();
+          setProfile(null);
+        },
         refresh: () => loadProfile(user?.id),
       }}
     >
