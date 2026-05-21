@@ -178,7 +178,7 @@ function TeacherLoginForm({ onSuccess }: { onSuccess: () => void }) {
       setLoading(false);
       if (!t) {
         return toast.error("Login guru gagal", {
-          description: "Username atau password salah. Coba akun demo: bukartika / safe123.",
+          description: "Username atau password salah. Hubungi administrator sekolah.",
         });
       }
       toast.success(`Selamat datang, ${t.nama} 👩‍🏫`, {
@@ -196,7 +196,7 @@ function TeacherLoginForm({ onSuccess }: { onSuccess: () => void }) {
           <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             required
-            placeholder="bukartika"
+            placeholder="Username guru"
             value={u}
             onChange={(e) => setU(e.target.value)}
             className="pl-9"
@@ -228,12 +228,6 @@ function TeacherLoginForm({ onSuccess }: { onSuccess: () => void }) {
         <LogIn className="mr-2 h-4 w-4" />
         {loading ? "Memeriksa..." : "Masuk"}
       </Button>
-      <div className="rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground">
-        <p className="font-medium text-foreground">Akun demo guru BK:</p>
-        <p className="mt-1">
-          <code>bukartika</code> / <code>safe123</code>
-        </p>
-      </div>
     </form>
   );
 }

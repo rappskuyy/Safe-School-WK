@@ -1,37 +1,38 @@
-// =====================================================
-// LOGIN GURU MANUAL (HARDCODED) — SafeSchool
-// -----------------------------------------------------
-// Tidak ada pendaftaran. Akun guru ditulis langsung di
-// file ini. Kalau mau tambah/ganti guru, edit array
-// TEACHERS di bawah lalu simpan.
-// =====================================================
+import bcrypt from "bcryptjs";
+import { supabaseAdmin } from "@/integrations/supabase/admin-client";
 
 export type Teacher = {
-  username: string;
-  password: string;
+  id: string;
+  email: string;
   nama: string;
-  mapel: string;
+  rayon: string;
 };
-
-// 👇 Daftar akun guru BK (ubah sesuai sekolahmu)
-export const TEACHERS: Teacher[] = [
-  { username: "bukartika",  password: "safe123", nama: "Bu Kartika, S.Pd", mapel: "Guru BK Kelas X" },
-  { username: "pakraka",    password: "safe123", nama: "Pak Raka, M.Psi",  mapel: "Guru BK Kelas XI" },
-  { username: "buanindya",  password: "safe123", nama: "Bu Anindya, S.Psi",mapel: "Guru BK Kelas XII" },
-];
 
 const KEY = "safeschool_teacher";
 
-export function loginTeacher(username: string, password: string): Teacher | null {
-  const t = TEACHERS.find(
-    (x) => x.username.toLowerCase() === username.toLowerCase() && x.password === password,
-  );
-  if (!t) return null;
-  localStorage.setItem(KEY, JSON.stringify({ username: t.username, nama: t.nama, mapel: t.mapel }));
+export async function loginTeacher(
+  email: string,
+  password: string,
+): Promise<Teacher | null> {
+  // 1. Ambil data guru by email via RPC (service_role, bypass RLS)
+  const { data, error } = await supabaseAdmin.rpc("get_teacher_by_email", {
+    p_email: email.trim().toLowerCase(),
+  });
+
+  if (error || !data || data.length === 0) return null;
+
+  const row = data[0] as Teacher & { password_hash: string };
+
+  // 2. Verifikasi password bcrypt di frontend
+  const match = await bcrypt.compare(password, row.password_hash);
+  if (!match) return null;
+
+  const t: Teacher = { id: row.id, email: row.email, nama: row.nama, rayon: row.rayon };
+  localStorage.setItem(KEY, JSON.stringify(t));
   return t;
 }
 
-export function getTeacher(): Pick<Teacher, "username" | "nama" | "mapel"> | null {
+export function getTeacher(): Teacher | null {
   try {
     const raw = localStorage.getItem(KEY);
     return raw ? JSON.parse(raw) : null;

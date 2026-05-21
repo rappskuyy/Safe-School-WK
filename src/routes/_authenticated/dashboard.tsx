@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { supabase } from "@/integrations/supabase/client";
+import { supabaseAdmin } from "@/integrations/supabase/admin-client";
 import { getTeacher, logoutTeacher } from "@/lib/teacher-auth";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
@@ -123,7 +124,7 @@ function ReportRow({ r, onUpdate }: { r: Report; onUpdate: () => void }) {
   const [savingNote, setSavingNote] = useState(false);
 
   const updateStatus = async (status: string) => {
-    const { error } = await supabase.from("reports").update({ status, updated_at: new Date().toISOString() }).eq("id", r.id);
+    const { error } = await supabaseAdmin.from("reports").update({ status, updated_at: new Date().toISOString() }).eq("id", r.id);
     if (error) return toast.error(error.message);
     toast.success("Status diperbarui");
     onUpdate();
@@ -131,7 +132,7 @@ function ReportRow({ r, onUpdate }: { r: Report; onUpdate: () => void }) {
 
   const saveNote = async () => {
     setSavingNote(true);
-    const { error } = await supabase.from("reports").update({ catatan_guru: catatan, updated_at: new Date().toISOString() }).eq("id", r.id);
+    const { error } = await supabaseAdmin.from("reports").update({ catatan_guru: catatan, updated_at: new Date().toISOString() }).eq("id", r.id);
     setSavingNote(false);
     if (error) return toast.error(error.message);
     toast.success("Catatan disimpan");
@@ -140,7 +141,7 @@ function ReportRow({ r, onUpdate }: { r: Report; onUpdate: () => void }) {
 
   const getBuktiUrl = async () => {
     if (!r.bukti_url) return;
-    const { data } = await supabase.storage.from("report-evidence").createSignedUrl(r.bukti_url, 3600);
+    const { data } = await supabaseAdmin.storage.from("report-evidence").createSignedUrl(r.bukti_url, 3600);
     if (data?.signedUrl) window.open(data.signedUrl, "_blank");
   };
 
@@ -251,11 +252,11 @@ function Dashboard() {
   const loadAll = async () => {
     setLoading(true);
     const [r, c, m, k, n] = await Promise.all([
-      supabase.from("reports").select("*").order("created_at", { ascending: false }),
-      supabase.from("consultations").select("*").order("created_at", { ascending: false }),
-      supabase.from("mood_entries").select("mood, created_at").order("created_at", { ascending: false }).limit(500),
-      supabase.from("kindness_wall").select("id, name, message, status, created_at").order("created_at", { ascending: false }),
-      supabase.from("guru_notifications").select("*").order("created_at", { ascending: false }).limit(30),
+      supabaseAdmin.from("reports").select("*").order("created_at", { ascending: false }),
+      supabaseAdmin.from("consultations").select("*").order("created_at", { ascending: false }),
+      supabaseAdmin.from("mood_entries").select("mood, created_at").order("created_at", { ascending: false }).limit(500),
+      supabaseAdmin.from("kindness_wall").select("id, name, message, status, created_at").order("created_at", { ascending: false }),
+      supabaseAdmin.from("guru_notifications").select("*").order("created_at", { ascending: false }).limit(30),
     ]);
     if (r.data) setReports(r.data);
     if (c.data) setConsults(c.data);
@@ -271,12 +272,12 @@ function Dashboard() {
   const pendingKindness = kindness.filter(k => k.status === "pending");
 
   const markAllRead = async () => {
-    await supabase.from("guru_notifications").update({ is_read: true }).eq("is_read", false);
+    await supabaseAdmin.from("guru_notifications").update({ is_read: true }).eq("is_read", false);
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
   };
 
   const moderateKindness = async (id: string, action: "approved" | "rejected") => {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("kindness_wall")
       .update({ status: action, approved_at: new Date().toISOString() })
       .eq("id", id);
@@ -321,7 +322,7 @@ function Dashboard() {
               </div>
               <div>
                 <h1 className="font-display text-2xl font-bold md:text-3xl">{teacher?.nama}</h1>
-                <p className="text-sm opacity-90">{teacher?.mapel}</p>
+                <p className="text-sm opacity-90">{teacher?.rayon}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -545,7 +546,7 @@ function Dashboard() {
                               {c.status === "menunggu" && (
                                 <Button size="sm" variant="ghost" className="h-7 text-xs"
                                   onClick={async () => {
-                                    await supabase.from("consultations").update({ status: "dijadwalkan" }).eq("id", c.id);
+                                    await supabaseAdmin.from("consultations").update({ status: "dijadwalkan" }).eq("id", c.id);
                                     toast.success("Dijadwalkan"); loadAll();
                                   }}>
                                   Jadwalkan
@@ -554,7 +555,7 @@ function Dashboard() {
                               {c.status === "dijadwalkan" && (
                                 <Button size="sm" variant="ghost" className="h-7 text-xs text-emerald-600"
                                   onClick={async () => {
-                                    await supabase.from("consultations").update({ status: "selesai" }).eq("id", c.id);
+                                    await supabaseAdmin.from("consultations").update({ status: "selesai" }).eq("id", c.id);
                                     toast.success("Selesai"); loadAll();
                                   }}>
                                   Selesai
